@@ -1,3 +1,5 @@
+// @flow
+
 const DEFAULT_STATE = {
     searchTerm: ''
 };
