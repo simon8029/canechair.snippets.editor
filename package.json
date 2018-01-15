@@ -16,8 +16,9 @@
     "build-storybook": "build-storybook -s public"
   },
   "devDependencies": {
-    "@storybook/react": "^3.3.9",
     "@storybook/addon-actions": "^3.3.9",
-    "@storybook/addon-links": "^3.3.9"
+    "@storybook/addon-links": "^3.3.9",
+    "@storybook/react": "^3.3.9",
+    "flow-bin": "^0.63.1"
   }
 }
