@@ -1,0 +1,1 @@
+# canechair.snippets.editor
