@@ -1,0 +1,18 @@
+{
+  "name": "canechair.snippets.editor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simon8029/canechair.snippets.editor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/simon8029/canechair.snippets.editor/issues"
+  },
+  "homepage": "https://github.com/simon8029/canechair.snippets.editor#readme"
+}
