@@ -1,13 +1,12 @@
 import * as React from 'react';
-
 export interface Props {
-    name: string;
+    languageName: string;
     enthusiasmLevel?: number;
-    onIncrement?: () => void;
-    onDecrement?: () => void;
+    incrementEnthusiasm?: () => {};
+    decrementEnthusiasm?: () => {};
 }
 
-function Hello({ name, enthusiasmLevel = 1, onIncrement, onDecrement }: Props) {
+function Hello({ languageName = 'asd', enthusiasmLevel = 1, incrementEnthusiasm, decrementEnthusiasm }: Props) {
     if (enthusiasmLevel <= 0) {
         throw new Error('You could be a little more enthusiastic. :D');
     }
@@ -15,11 +14,11 @@ function Hello({ name, enthusiasmLevel = 1, onIncrement, onDecrement }: Props) {
     return (
         <div className="hello">
             <div className="greeting">
-                {name + getExclamationMarks(enthusiasmLevel)}
+                {languageName + getExclamationMarks(enthusiasmLevel)}
             </div>
             <div>
-                <button onClick={onDecrement}>-</button>
-                <button onClick={onIncrement}>+</button>
+                <button onClick={decrementEnthusiasm}>-</button>
+                <button onClick={incrementEnthusiasm}>+</button>
             </div>
         </div>
     );

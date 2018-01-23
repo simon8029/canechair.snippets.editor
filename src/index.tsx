@@ -3,21 +3,17 @@ import * as ReactDOM from 'react-dom';
 
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
-import { createStore } from 'redux';
-import { enthusiasm } from './reducers/index';
-import { StoreState } from './types/index';
 import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import sinppetsEditorApp from './reducers/index';
 
-import H from './containers/H';
+import A from './containers/H';
 
-const store = createStore<StoreState>(enthusiasm, {
-  enthusiasmLevel: 1,
-  languageName: 'TypeScript',
-});
+const store = createStore(sinppetsEditorApp);
 
 ReactDOM.render(
   <Provider store={store}>
-    <H />
+    <A />
   </Provider>,
   document.getElementById('root') as HTMLElement
 );
