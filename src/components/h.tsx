@@ -1,9 +1,28 @@
-import * as React from "react";
+import * as React from 'react';
 
-export interface HelloProps {
-    compiler,
-    framework : string;
+export interface Props {
+    name: string;
+    enthusiasmLevel?: number;
 }
 
-export const Hello = (props) => <h1>Hello from {props.compiler}
-    and {props.framework}!</h1>;
+function Hello({ name, enthusiasmLevel = 1 }: Props) {
+    if (enthusiasmLevel <= 0) {
+        throw new Error('You could be a little more enthusiastic. :D');
+    }
+
+    return (
+        <div className="hello">
+            <div className="greeting">
+                {name + getExclamationMarks(enthusiasmLevel)}
+            </div>
+        </div>
+    );
+}
+
+export default Hello;
+
+// helpers
+
+function getExclamationMarks(numChars: number) {
+    return Array(numChars + 1).join('!');
+}
