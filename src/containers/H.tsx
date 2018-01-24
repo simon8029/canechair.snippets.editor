@@ -20,3 +20,40 @@
 // }
 
 // export default connect(mapStateToProps, mapDispatchToProps)(H);
+
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as HActions from '../actions/HActions';
+class H extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        this.state = props.state;
+        this.actions = props.actions;
+    }
+
+    render() {
+        return (
+            <div>
+                "H" is working!
+        </div>
+        );
+    }
+}
+H.propTypes = {
+    actions: PropTypes.object.isRequired
+};
+
+function mapStateToProps(store, ownProps) {
+    return {
+        state: store
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators(HActions, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(H);
