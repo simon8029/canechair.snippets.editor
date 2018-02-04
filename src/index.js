@@ -5,5 +5,5 @@ import H from './components/H';
 import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
-    <H/>, document.getElementById('root'));
+    <H />, document.getElementById('root'));
 registerServiceWorker();

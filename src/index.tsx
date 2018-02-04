@@ -5,11 +5,11 @@ import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import sinppetsEditorApp from './reducers/index';
+import rootReducer from './reducers/index';
 
 import A from './containers/H';
 
-const store = createStore(sinppetsEditorApp);
+const store = createStore(rootReducer);
 
 ReactDOM.render(
   <Provider store={store}>

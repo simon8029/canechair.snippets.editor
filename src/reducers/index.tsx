@@ -2,8 +2,8 @@
 import { combineReducers } from 'redux';
 import EnthusiasmReducer from './EnthusiasmReducer';
 
-const sinppetsEditorApp = combineReducers({
+const rootReducer = combineReducers({
     EnthusiasmReducer,
 });
 
-export default sinppetsEditorApp;
+export default rootReducer;
