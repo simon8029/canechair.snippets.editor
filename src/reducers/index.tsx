@@ -7,7 +7,7 @@ export function enthusiasm(state: StoreState, action: EnthusiasmAction): StoreSt
         case INCREMENT_ENTHUSIASM:
             return { ...state, enthusiasmLevel: state.enthusiasmLevel + 1 };
         case DECREMENT_ENTHUSIASM:
-            return { ...state, enthusiasmLevel: state.enthusiasmLevel - 1 };
+            return { ...state, enthusiasmLevel: Math.max(state.enthusiasmLevel - 1) };
         default:
             return state;
     }
