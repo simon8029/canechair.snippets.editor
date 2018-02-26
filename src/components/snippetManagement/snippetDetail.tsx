@@ -35,8 +35,13 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
         <form onSubmit={this.onFormSubmit}>
           <div id="" className="">
             <input type="button" className="btn btn-outline-warning btn-sm" onClick={() => { this.props.history.push('/Snippets'); }} value={'<= Go Back'} />
-            <h4 className="my-3">Snippet</h4>
+            <input
+              type="submit"
+              className="btn btn-outline-success btn-sm mx-1 float-right"
+              value={this.state.isNewSnippet ? 'Add' : 'Update'}
+            />
           </div>
+          <h4 className="my-3">Snippet</h4>
           <div className="">
             <div className="form-row">
               <div className="col">
@@ -69,11 +74,6 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
                   validate={(value) => value.length < 300 ? false : 'Description should less than 300 characters.'}
                 />
               </div>
-              <input
-                type="submit"
-                className="btn btn-outline-success form-control mx-1"
-                value={this.state.isNewSnippet ? 'Add' : 'Update'}
-              />
             </div>
           </div>
         </form>
