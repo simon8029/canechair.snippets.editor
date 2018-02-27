@@ -6,12 +6,15 @@ import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
 import 'brace/theme/tomorrow';
 import { SnippetModel } from 'types/modelTypes/SnippetModel';
+import { SnippetLanguageModel } from 'types/modelTypes/SnippetLanguageModel';
 import ISnippetAction from 'actions/interfaces/ISnippetAction';
 import * as SnippetActions from 'actions/SnippetActions';
 import StoreStateType from 'types/StateTypes/StoreStateType';
 import CCTextField from 'components/CommonComponent/CCTextField';
 import * as toastr from 'toastr';
 const UUID = require('uuid/v4');
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 
 class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
   constructor(props: StateToPropsType) {
@@ -28,7 +31,8 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
         SnippetDescription: (this.props.currentSnippet.SnippetDescription !== undefined) ? this.props.currentSnippet.SnippetDescription : ''
       },
       textFieldsErrors: {},
-      SnippetBody: this.props.SnippetBody
+      SnippetBody: this.props.SnippetBody,
+      SnippetLanguage: this.props.SnippetLanguage
     };
   }
 
@@ -77,6 +81,14 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
                   validate={(value) => value.length < 300 ? false : 'Description should less than 300 characters.'}
                 />
               </div>
+              <div className="col">
+                <Select
+                  name="ddlSnippetLanguage"
+                  value={this.state.SnippetLanguage}
+                  onChange={this.onDDLSnippetLanguageChange}
+                  options={getOptionsForDDLSnippetLanguage(this.props.SnippetLanguages)}
+                />
+              </div>
             </div>
           </div>
           <hr />
@@ -117,7 +129,8 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
           SnippetName: nextProps.currentSnippet.SnippetName ? nextProps.currentSnippet.SnippetName : '',
           SnippetDescription: nextProps.currentSnippet.SnippetDescription ? nextProps.currentSnippet.SnippetDescription : ''
         },
-        SnippetBody: nextProps.currentSnippet.SnippetBody
+        SnippetBody: nextProps.currentSnippet.SnippetBody,
+        SnippetLanguage: nextProps.currentSnippet.SnippetLanguage
       });
     }
   }
@@ -125,6 +138,10 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
   componentDidUpdate() {
     //
 
+  }
+
+  onDDLSnippetLanguageChange = (selectedOption: any) => {
+    this.setState({ SnippetLanguage: selectedOption.value });
   }
 
   onSnippetBodyEditorContentChange = (content: string) => {
@@ -209,9 +226,16 @@ function getSnippetById(Snippets: SnippetModel[], SnippetId: string) {
   return new SnippetModel();
 }
 
+function getOptionsForDDLSnippetLanguage(snippetLanguages: SnippetLanguageModel[]) {
+  return snippetLanguages.map(l => {
+    return { label: l.SnippetLanguageName, value: l.SnippetLanguageName };
+  });
+}
+
 function mapStateToProps(storeState: StoreStateType, ownProps: OwnProps): StateToPropsType {
   const SnippetId = ownProps.match.params.SnippetId;
   let currentSnippet = new SnippetModel();
+  let snippetLanguage = new SnippetLanguageModel();
   let isNewSnippet = SnippetId === undefined;
   let snippetBody = '';
 
@@ -219,13 +243,17 @@ function mapStateToProps(storeState: StoreStateType, ownProps: OwnProps): StateT
     currentSnippet = getSnippetById(storeState.SnippetArray, SnippetId);
     isNewSnippet = false;
     snippetBody = currentSnippet.SnippetBody;
+    snippetLanguage = currentSnippet.SnippetLanguage;
+
   }
 
   return {
     SnippetArray: storeState.SnippetArray,
     currentSnippet: currentSnippet,
     isNewSnippet: isNewSnippet,
-    SnippetBody: snippetBody
+    SnippetBody: snippetBody,
+    SnippetLanguages: storeState.SnippetLanguageArray,
+    SnippetLanguage: snippetLanguage
   };
 }
 
@@ -247,7 +275,8 @@ type ThisStateType = {
     SnippetDescription: string;
   },
   textFieldsErrors: {},
-  SnippetBody: string
+  SnippetBody: string,
+  SnippetLanguage: SnippetLanguageModel
 };
 
 type StateToPropsType = {
@@ -257,6 +286,8 @@ type StateToPropsType = {
   isNewSnippet: boolean;
   isFormSaving?: boolean;
   SnippetBody: string;
+  SnippetLanguages: SnippetLanguageModel[];
+  SnippetLanguage: SnippetLanguageModel
 };
 
 type DispatchToPropsType = {

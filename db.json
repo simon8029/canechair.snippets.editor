@@ -11,5 +11,17 @@
       "SnippetName": "sdf",
       "SnippetDescription": "sdf"
     }
+  ],
+  "snippetLanguage": [
+    {
+      "id": "2cba1ca2-90af-418f-acab-e2d21e6d873d",
+      "SnippetLanguageName": "ts",
+      "SnippetLanguageDescription": ""
+    },
+    {
+      "id": "3d44e8ee-29bb-4155-a053-e0e9a23ce70f",
+      "SnippetLanguageName": "tsx",
+      "SnippetLanguageDescription": ""
+    }
   ]
 }

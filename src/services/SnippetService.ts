@@ -56,6 +56,12 @@ class SnippetService {
     });
     return result;
   }
+
+  static generateSnippetJsonFiles(snippetArray: SnippetModel[]): void {
+    // Generate json files
+    // Generate package.json file
+  }
+
 }
 
 export default SnippetService;
