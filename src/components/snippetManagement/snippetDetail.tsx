@@ -2,7 +2,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import Store from 'store/store';
+import AceEditor from 'react-ace';
+import 'brace/mode/javascript';
+import 'brace/theme/tomorrow';
 import { SnippetModel } from 'types/modelTypes/SnippetModel';
 import ISnippetAction from 'actions/interfaces/ISnippetAction';
 import * as SnippetActions from 'actions/SnippetActions';
@@ -25,7 +27,8 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
         SnippetName: (this.props.currentSnippet.SnippetName !== undefined) ? this.props.currentSnippet.SnippetName : '',
         SnippetDescription: (this.props.currentSnippet.SnippetDescription !== undefined) ? this.props.currentSnippet.SnippetDescription : ''
       },
-      textFieldsErrors: {}
+      textFieldsErrors: {},
+      SnippetBody: this.props.SnippetBody
     };
   }
 
@@ -76,6 +79,17 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
               </div>
             </div>
           </div>
+          <hr />
+          <AceEditor
+            mode="javascript"
+            theme="tomorrow"
+            width="100%"
+            onChange={this.onSnippetBodyEditorContentChange}
+            name="TemplateEditor"
+            value={this.state.SnippetBody}
+            highlightActiveLine={false}
+            editorProps={{ $blockScrolling: true }}
+          />
         </form>
       </div>
     );
@@ -86,9 +100,8 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
   }
 
   componentDidMount() {
-    // if the component is loaded through browser url instead of <Link>, reload all data
     if (this.state.SnippetArray.length === 0) {
-      Store.dispatch(SnippetActions.getAllSnippet());
+      this.props.actions.getAllSnippet();
     }
   }
 
@@ -103,15 +116,19 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
           id: nextProps.currentSnippet.id ? nextProps.currentSnippet.id : '',
           SnippetName: nextProps.currentSnippet.SnippetName ? nextProps.currentSnippet.SnippetName : '',
           SnippetDescription: nextProps.currentSnippet.SnippetDescription ? nextProps.currentSnippet.SnippetDescription : ''
-        }
+        },
+        SnippetBody: nextProps.currentSnippet.SnippetBody
       });
     }
-    this.setState({ SnippetArray: nextProps.SnippetArray });
   }
 
   componentDidUpdate() {
     //
 
+  }
+
+  onSnippetBodyEditorContentChange = (content: string) => {
+    this.setState({ SnippetBody: content });
   }
 
   onTextFieldChange = (fieldName: string, value: string, error: string | boolean) => {
@@ -130,6 +147,7 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
     Snippet.id = this.state.textFields.id ? this.state.textFields.id : UUID();
     Snippet.SnippetName = this.state.textFields.SnippetName;
     Snippet.SnippetDescription = this.state.textFields.SnippetDescription;
+    Snippet.SnippetBody = this.state.SnippetBody;
 
     if (!this.isFormValid()) {
       return;
@@ -141,6 +159,7 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
       this.props.actions.addNewSnippet(Snippet)
         .then((res: any) => {
           this.redirectToSnippetsComponent();
+          toastr.success('New Snippet Added.');
         })
         .catch((error: string) => {
           this.catchError(error);
@@ -148,7 +167,7 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
     } else {
       this.props.actions.updateSnippet(Snippet)
         .then(() => {
-          this.redirectToSnippetsComponent();
+          toastr.success('Snippet updated.');
         })
         .catch((error: string) => {
           this.catchError(error);
@@ -194,16 +213,19 @@ function mapStateToProps(storeState: StoreStateType, ownProps: OwnProps): StateT
   const SnippetId = ownProps.match.params.SnippetId;
   let currentSnippet = new SnippetModel();
   let isNewSnippet = SnippetId === undefined;
+  let snippetBody = '';
 
   if (SnippetId && storeState.SnippetArray.length > 0) {
     currentSnippet = getSnippetById(storeState.SnippetArray, SnippetId);
     isNewSnippet = false;
+    snippetBody = currentSnippet.SnippetBody;
   }
 
   return {
     SnippetArray: storeState.SnippetArray,
     currentSnippet: currentSnippet,
-    isNewSnippet: isNewSnippet
+    isNewSnippet: isNewSnippet,
+    SnippetBody: snippetBody
   };
 }
 
@@ -214,7 +236,7 @@ function mapDispatchToProps(dispatch: Dispatch<ISnippetAction>): DispatchToProps
 }
 
 type ThisStateType = {
-  SnippetArray: Array<SnippetModel>;
+  SnippetArray: SnippetModel[];
   currentSnippet: SnippetModel;
   errors: string[],
   isNewSnippet: boolean,
@@ -224,15 +246,17 @@ type ThisStateType = {
     SnippetName: string;
     SnippetDescription: string;
   },
-  textFieldsErrors: {}
+  textFieldsErrors: {},
+  SnippetBody: string
 };
 
 type StateToPropsType = {
-  SnippetArray: Array<SnippetModel>;
+  SnippetArray: SnippetModel[];
   currentSnippet: SnippetModel;
   errors?: Object;
   isNewSnippet: boolean;
   isFormSaving?: boolean;
+  SnippetBody: string;
 };
 
 type DispatchToPropsType = {
