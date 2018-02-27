@@ -7,8 +7,8 @@ import 'brace/mode/javascript';
 import 'brace/theme/tomorrow';
 import { SnippetModel } from 'types/modelTypes/SnippetModel';
 import { SnippetLanguageModel } from 'types/modelTypes/SnippetLanguageModel';
-import ISnippetAction from 'actions/interfaces/ISnippetAction';
-import * as SnippetActions from 'actions/SnippetActions';
+import ISnippetLanguageAction from 'actions/interfaces/ISnippetLanguageAction';
+import * as SnippetLanguageActions from 'actions/SnippetLanguageActions';
 import StoreStateType from 'types/StateTypes/StoreStateType';
 import CCTextField from 'components/CommonComponent/CCTextField';
 import * as toastr from 'toastr';
@@ -20,7 +20,6 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
   constructor(props: StateToPropsType) {
     super(props as any);
     this.state = {
-      SnippetArray: this.props.SnippetArray,
       currentSnippet: this.props.currentSnippet,
       errors: [],
       isNewSnippet: this.props.isNewSnippet,
@@ -32,7 +31,8 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
       },
       textFieldsErrors: {},
       SnippetBody: this.props.SnippetBody,
-      SnippetLanguage: this.props.SnippetLanguage
+      SnippetLanguageArray: this.props.SnippetLanguageArray,
+      CurrentSnippetLanguage: this.props.CurrentSnippetLanguage
     };
   }
 
@@ -41,20 +41,20 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
       <div className="container mt-3">
         <form onSubmit={this.onFormSubmit}>
           <div id="" className="">
-            <input type="button" className="btn btn-outline-warning btn-sm" onClick={() => { this.props.history.push('/Snippets'); }} value={'<= Go Back'} />
+            <input type="button" className="btn btn-outline-warning btn-sm" onClick={() => { this.props.history.push(`/SnippetLanguage/${this.state.CurrentSnippetLanguage.id}`); }} value={'<= Go Back'} />
             <input
               type="submit"
               className="btn btn-outline-success btn-sm mx-1 float-right"
               value={this.state.isNewSnippet ? 'Add' : 'Update'}
             />
           </div>
-          <h4 className="my-3">Snippet</h4>
+          <h4 className="my-3">Customer Profession</h4>
           <div className="">
             <div className="form-row">
               <div className="col">
                 <CCTextField
                   fieldName="id"
-                  label="Snippet ID"
+                  label="profession ID"
                   value={this.state.textFields.id}
                   onChange={this.onTextFieldChange}
                 />
@@ -62,7 +62,7 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
               <div className="col">
                 <CCTextField
                   fieldName="SnippetName"
-                  label="Snippet Name"
+                  label="profession Name"
                   value={this.state.textFields.SnippetName}
                   isRequired={true}
                   isRequiredErrorMessage="Snippet Name is required...."
@@ -84,9 +84,9 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
               <div className="col">
                 <Select
                   name="ddlSnippetLanguage"
-                  value={this.state.SnippetLanguage}
+                  value={this.state.CurrentSnippetLanguage}
                   onChange={this.onDDLSnippetLanguageChange}
-                  options={getOptionsForDDLSnippetLanguage(this.props.SnippetLanguages)}
+                  options={getOptionsForDDLSnippetLanguage(this.props.SnippetLanguageArray)}
                 />
               </div>
             </div>
@@ -112,14 +112,12 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
   }
 
   componentDidMount() {
-    if (this.state.SnippetArray.length === 0) {
-      this.props.actions.getAllSnippet();
+    if (this.state.SnippetLanguageArray.length === 0) {
+      this.props.actions.getAllSnippetLanguage();
     }
   }
 
   componentWillReceiveProps(nextProps: StateToPropsType) {
-    console.log(`nextProps:`);
-    console.log(nextProps);
     // Set current selected Snippet to state
     if (nextProps.currentSnippet !== undefined) {
       this.setState({
@@ -130,7 +128,7 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
           SnippetDescription: nextProps.currentSnippet.SnippetDescription ? nextProps.currentSnippet.SnippetDescription : ''
         },
         SnippetBody: nextProps.currentSnippet.SnippetBody,
-        SnippetLanguage: nextProps.currentSnippet.SnippetLanguage
+        CurrentSnippetLanguage: nextProps.CurrentSnippetLanguage
       });
     }
   }
@@ -141,7 +139,7 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
   }
 
   onDDLSnippetLanguageChange = (selectedOption: any) => {
-    this.setState({ SnippetLanguage: selectedOption.value });
+    this.setState({ CurrentSnippetLanguage: selectedOption.value });
   }
 
   onSnippetBodyEditorContentChange = (content: string) => {
@@ -172,8 +170,13 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
 
     this.setState({ isFormSaving: true });
 
+    console.log(`this.state.CurrentSnippetLanguage:`);
+    console.log(this.state.CurrentSnippetLanguage);
+    let newSnippetLanguage = Object.assign({}, this.state.CurrentSnippetLanguage);
+
     if (this.state.isNewSnippet) {
-      this.props.actions.addNewSnippet(Snippet)
+      newSnippetLanguage.Snippets.push(Snippet);
+      this.props.actions.updateSnippetLanguage(newSnippetLanguage)
         .then((res: any) => {
           this.redirectToSnippetsComponent();
           toastr.success('New Snippet Added.');
@@ -182,8 +185,10 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
           this.catchError(error);
         });
     } else {
-      this.props.actions.updateSnippet(Snippet)
+      Object.assign(newSnippetLanguage.Snippets.filter(s => s.id === this.state.currentSnippet.id)[0], Snippet);
+      this.props.actions.updateSnippetLanguage(newSnippetLanguage)
         .then(() => {
+          this.setState({ CurrentSnippetLanguage: newSnippetLanguage });
           toastr.success('Snippet updated.');
         })
         .catch((error: string) => {
@@ -194,8 +199,7 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
 
   redirectToSnippetsComponent() {
     this.setState({ isFormSaving: false });
-    toastr.success(this.state.isNewSnippet ? 'New Snippet added.' : 'Snippet updated.');
-    this.props.history.push('/Snippets');
+    this.props.history.push(`/SnippetLanguage/${this.state.CurrentSnippetLanguage.id}`);
   }
 
   catchError(error: string) {
@@ -220,8 +224,10 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
   }
 }
 
-function getSnippetById(Snippets: SnippetModel[], SnippetId: string) {
-  const Snippet = Snippets.filter((s: SnippetModel) => s.id === SnippetId);
+function getSnippetById(SnippetLanguages: SnippetLanguageModel[], SnippetLanguageId: string, SnippetId: string) {
+  const Snippet = SnippetLanguages
+    .filter((sl: SnippetLanguageModel) => sl.id === SnippetLanguageId)[0]
+    .Snippets.filter((s: SnippetModel) => s.id === SnippetId);
   if (Snippet) { return Snippet[0]; }
   return new SnippetModel();
 }
@@ -233,38 +239,38 @@ function getOptionsForDDLSnippetLanguage(snippetLanguages: SnippetLanguageModel[
 }
 
 function mapStateToProps(storeState: StoreStateType, ownProps: OwnProps): StateToPropsType {
+  const SnippetLanguageId = ownProps.match.params.SnippetLanguageId;
   const SnippetId = ownProps.match.params.SnippetId;
-  let currentSnippet = new SnippetModel();
-  let snippetLanguage = new SnippetLanguageModel();
   let isNewSnippet = SnippetId === undefined;
+  let currentSnippet = new SnippetModel();
+  let currentSnippetLanguage = ownProps.location.state.currentSnippetLanguage;
   let snippetBody = '';
 
-  if (SnippetId && storeState.SnippetArray.length > 0) {
-    currentSnippet = getSnippetById(storeState.SnippetArray, SnippetId);
+  if (SnippetId && storeState.SnippetLanguageArray.length > 0) {
+    currentSnippet = getSnippetById(storeState.SnippetLanguageArray, SnippetLanguageId, SnippetId);
     isNewSnippet = false;
     snippetBody = currentSnippet.SnippetBody;
-    snippetLanguage = currentSnippet.SnippetLanguage;
+    currentSnippetLanguage = currentSnippetLanguage;
 
   }
 
   return {
-    SnippetArray: storeState.SnippetArray,
+    SnippetLanguageArray: storeState.SnippetLanguageArray,
     currentSnippet: currentSnippet,
     isNewSnippet: isNewSnippet,
     SnippetBody: snippetBody,
-    SnippetLanguages: storeState.SnippetLanguageArray,
-    SnippetLanguage: snippetLanguage
+    CurrentSnippetLanguage: currentSnippetLanguage
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<ISnippetAction>): DispatchToPropsType {
+function mapDispatchToProps(dispatch: Dispatch<ISnippetLanguageAction>): DispatchToPropsType {
   return {
-    actions: bindActionCreators(SnippetActions, dispatch)
+    actions: bindActionCreators(SnippetLanguageActions, dispatch)
   };
 }
 
 type ThisStateType = {
-  SnippetArray: SnippetModel[];
+  SnippetLanguageArray: SnippetLanguageModel[];
   currentSnippet: SnippetModel;
   errors: string[],
   isNewSnippet: boolean,
@@ -276,27 +282,27 @@ type ThisStateType = {
   },
   textFieldsErrors: {},
   SnippetBody: string,
-  SnippetLanguage: SnippetLanguageModel
+  CurrentSnippetLanguage: SnippetLanguageModel
 };
 
 type StateToPropsType = {
-  SnippetArray: SnippetModel[];
+  SnippetLanguageArray: SnippetLanguageModel[];
+  CurrentSnippetLanguage: SnippetLanguageModel
   currentSnippet: SnippetModel;
   errors?: Object;
   isNewSnippet: boolean;
   isFormSaving?: boolean;
   SnippetBody: string;
-  SnippetLanguages: SnippetLanguageModel[];
-  SnippetLanguage: SnippetLanguageModel
 };
 
 type DispatchToPropsType = {
-  actions: typeof SnippetActions;
+  actions: typeof SnippetLanguageActions;
 };
 
-type RCProps = RouteComponentProps<{ SnippetId: string }>;
+type RCProps = RouteComponentProps<{ SnippetLanguageId: string, SnippetId: string }>;
 
 type OwnProps = {
+  currentSnippetLanguage: SnippetLanguageModel;
 } & RCProps;
 
 type ThisPropsType = StateToPropsType & DispatchToPropsType & OwnProps;

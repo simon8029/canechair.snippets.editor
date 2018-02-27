@@ -20,8 +20,8 @@ class SnippetLanguageMain extends React.Component<ThisPropsType, ThisStateType> 
   render() {
     return (
       <div className="container my-3">
-        <h4>Snippet Languages</h4>
-        <Link to="/snippetLanguage" className="btn btn-outline-primary btn-sm my-3" >Add Snippet Language</Link>
+        <h4>CRMCORE - Customers</h4>
+        <Link to="/snippetLanguage" className="btn btn-outline-primary btn-sm my-3" >Add </Link>
         <SnippetLanguageList
           SnippetLanguageArray={this.state.SnippetLanguageArray}
           onSnippetLanguageDelete={this.onSnippetLanguageDelete}

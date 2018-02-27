@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import Store from 'store/store';
 import { SnippetLanguageModel } from 'types/modelTypes/SnippetLanguageModel';
 import ISnippetLanguageAction from 'actions/interfaces/ISnippetLanguageAction';
 import * as SnippetLanguageActions from 'actions/SnippetLanguageActions';
+import SnippetList from 'components/snippetManagement/snippetList';
 import StoreStateType from 'types/StateTypes/StoreStateType';
 import CCTextField from 'components/CommonComponent/CCTextField';
 import * as toastr from 'toastr';
@@ -41,13 +42,13 @@ class SnippetLanguageDetail extends React.Component<ThisPropsType, ThisStateType
               value={this.state.isNewSnippetLanguage ? 'Add' : 'Update'}
             />
           </div>
-          <h4 className="my-3">SnippetLanguage</h4>
+          <h4 className="my-3">Customer - </h4>
           <div className="">
             <div className="form-row">
               <div className="col">
                 <CCTextField
                   fieldName="id"
-                  label="SnippetLanguage ID"
+                  label="Customer ID"
                   value={this.state.textFields.id}
                   onChange={this.onTextFieldChange}
                 />
@@ -55,7 +56,7 @@ class SnippetLanguageDetail extends React.Component<ThisPropsType, ThisStateType
               <div className="col">
                 <CCTextField
                   fieldName="SnippetLanguageName"
-                  label="SnippetLanguage Name"
+                  label="Customer Name"
                   value={this.state.textFields.SnippetLanguageName}
                   isRequired={true}
                   isRequiredErrorMessage="SnippetLanguage Name is required...."
@@ -77,6 +78,11 @@ class SnippetLanguageDetail extends React.Component<ThisPropsType, ThisStateType
             </div>
           </div>
         </form>
+        <hr />
+        <div>
+          <Link to={{ pathname: `/SnippetLanguage/${this.state.currentSnippetLanguage.id}/snippet`, state: { currentSnippetLanguage: this.state.currentSnippetLanguage } }} > Add </Link>
+        </div>
+        <SnippetList currentSnippetLanguage={this.state.currentSnippetLanguage} />
       </div>
     );
   }
@@ -93,8 +99,6 @@ class SnippetLanguageDetail extends React.Component<ThisPropsType, ThisStateType
   }
 
   componentWillReceiveProps(nextProps: StateToPropsType) {
-    console.log(`nextProps:`);
-    console.log(nextProps);
     // Set current selected SnippetLanguage to state
     if (nextProps.currentSnippetLanguage !== undefined) {
       this.setState({
