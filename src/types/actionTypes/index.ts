@@ -1,2 +1,2 @@
 export * from './CommonActionTypes';
-export * from './SnippetLanguageActionTypes';
+export * from './SnippetGroupActionTypes';

@@ -1,2 +1,2 @@
 export * from './SnippetModel';
-export * from './SnippetLanguageModel';
+export * from './SnippetGroupModel';

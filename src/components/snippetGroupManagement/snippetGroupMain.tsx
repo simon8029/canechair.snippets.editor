@@ -2,21 +2,21 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
-import { SnippetLanguageModel } from 'types/modelTypes/SnippetLanguageModel';
-import ISnippetLanguageAction from 'actions/interfaces/ISnippetLanguageAction';
+import { SnippetGroupModel } from 'types/modelTypes/SnippetGroupModel';
+import ISnippetGroupAction from 'actions/interfaces/ISnippetGroupAction';
 import StoreStateType from 'types/StateTypes/StoreStateType';
-import * as SnippetLanguageActions from 'actions/SnippetLanguageActions';
+import * as SnippetGroupActions from 'actions/SnippetGroupActions';
 import * as toastr from 'toastr';
 import * as FileSaver from 'file-saver';
 import * as JSZip from 'jszip';
 import { SnippetJsonTemplate } from 'templates/snippetJsonTemplate';
-import SnippetLanguageList from './snippetLanguageList';
+import SnippetGroupList from './snippetGroupList';
 
-class SnippetLanguageMain extends React.Component<ThisPropsType, ThisStateType> {
+class SnippetGroupMain extends React.Component<ThisPropsType, ThisStateType> {
   constructor(props: ThisPropsType) {
     super(props as any);
     this.state = {
-      SnippetLanguageArray: this.props.SnippetLanguageArray
+      SnippetGroupArray: this.props.SnippetGroupArray
     };
   }
 
@@ -24,11 +24,11 @@ class SnippetLanguageMain extends React.Component<ThisPropsType, ThisStateType> 
     return (
       <div className="container my-3">
         <h4>CRMCORE - Customers</h4>
-        <Link to="/snippetLanguage" className="btn btn-outline-primary btn-sm my-3" >Add </Link>
+        <Link to="/snippetGroup" className="btn btn-outline-primary btn-sm my-3" >Add </Link>
         <input type="button" onClick={this.generateSnippetFiles} value="Generate" className="btn btn-outline-success btn-sm float-right" />
-        <SnippetLanguageList
-          SnippetLanguageArray={this.state.SnippetLanguageArray}
-          onSnippetLanguageDelete={this.onSnippetLanguageDelete}
+        <SnippetGroupList
+          SnippetGroupArray={this.state.SnippetGroupArray}
+          onSnippetGroupDelete={this.onSnippetGroupDelete}
         />
       </div>
     );
@@ -39,11 +39,11 @@ class SnippetLanguageMain extends React.Component<ThisPropsType, ThisStateType> 
   }
 
   componentDidMount() {
-    this.props.actions.getAllSnippetLanguage();
+    this.props.actions.getAllSnippetGroup();
   }
 
   componentWillReceiveProps(nextProps: StateToPropsType) {
-    this.setState({ SnippetLanguageArray: nextProps.SnippetLanguageArray });
+    this.setState({ SnippetGroupArray: nextProps.SnippetGroupArray });
   }
 
   componentDidUpdate() {
@@ -51,16 +51,16 @@ class SnippetLanguageMain extends React.Component<ThisPropsType, ThisStateType> 
   }
 
   // Build in delete function, remove it if not needed.
-  onSnippetLanguageDelete = (SnippetLanguage: SnippetLanguageModel) => {
-    this.props.actions.deleteSnippetLanguage(SnippetLanguage)
+  onSnippetGroupDelete = (SnippetGroup: SnippetGroupModel) => {
+    this.props.actions.deleteSnippetGroup(SnippetGroup)
       .then(() => {
-        toastr.success('SnippetLanguage deleted.');
+        toastr.success('SnippetGroup deleted.');
       });
   }
 
   generateSnippetFiles = () => {
     let zip = new JSZip().folder('snippets');
-    this.state.SnippetLanguageArray.map(sl => {
+    this.state.SnippetGroupArray.map(sl => {
       let snippetBlocks = '';
       sl.Snippets.map(s => {
         snippetBlocks += SnippetJsonTemplate
@@ -73,8 +73,8 @@ class SnippetLanguageMain extends React.Component<ThisPropsType, ThisStateType> 
       // Add curve bracket and remove the last comma from snippetBlocks string.
       snippetBlocks = `{${snippetBlocks.slice(0, -1)}}`;
 
-      let snippetLanguage = new Blob([snippetBlocks], { type: 'text/json;charset=utf-8' });
-      zip.file(`${sl.SnippetLanguageName}_${sl.id}.json`, snippetLanguage);
+      let snippetGroup = new Blob([snippetBlocks], { type: 'text/json;charset=utf-8' });
+      zip.file(`CaneChairSnippets_${sl.SnippetGroupName}_.json`, snippetGroup);
     });
     zip.generateAsync({ type: 'blob' })
       .then((b) => {
@@ -86,26 +86,26 @@ class SnippetLanguageMain extends React.Component<ThisPropsType, ThisStateType> 
 
 function mapStateToProps(storeState: StoreStateType, ownProps: OwnProps): StateToPropsType {
   return {
-    SnippetLanguageArray: storeState.SnippetLanguageArray
+    SnippetGroupArray: storeState.SnippetGroupArray
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<ISnippetLanguageAction>): DispatchToPropsType {
+function mapDispatchToProps(dispatch: Dispatch<ISnippetGroupAction>): DispatchToPropsType {
   return {
-    actions: bindActionCreators(SnippetLanguageActions, dispatch)
+    actions: bindActionCreators(SnippetGroupActions, dispatch)
   };
 }
 
 type ThisStateType = {
-  SnippetLanguageArray: SnippetLanguageModel[]
+  SnippetGroupArray: SnippetGroupModel[]
 };
 
 type StateToPropsType = {
-  SnippetLanguageArray: SnippetLanguageModel[];
+  SnippetGroupArray: SnippetGroupModel[];
 };
 
 type DispatchToPropsType = {
-  actions: typeof SnippetLanguageActions;
+  actions: typeof SnippetGroupActions;
 };
 
 type RCProps = RouteComponentProps<{ id: number }>;
@@ -115,4 +115,4 @@ type OwnProps = {
 
 type ThisPropsType = StateToPropsType & DispatchToPropsType & OwnProps;
 
-export default withRouter(connect<StateToPropsType, DispatchToPropsType, OwnProps>(mapStateToProps, mapDispatchToProps)(SnippetLanguageMain));
+export default withRouter(connect<StateToPropsType, DispatchToPropsType, OwnProps>(mapStateToProps, mapDispatchToProps)(SnippetGroupMain));

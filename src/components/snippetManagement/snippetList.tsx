@@ -4,19 +4,19 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Link } from 'react-router-dom';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import { SnippetLanguageModel } from 'types/modelTypes/SnippetLanguageModel';
+import { SnippetGroupModel } from 'types/modelTypes/SnippetGroupModel';
 import { SnippetModel } from 'types/modelTypes/SnippetModel';
-import * as SnippetLanguageActions from 'actions/SnippetLanguageActions';
+import * as SnippetGroupActions from 'actions/SnippetGroupActions';
 import StoreStateType from 'types/StateTypes/StoreStateType';
 import * as toastr from 'toastr';
-import { ISnippetLanguageAction } from 'actions/interfaces/ISnippetLanguageAction';
+import { ISnippetGroupAction } from 'actions/interfaces/ISnippetGroupAction';
 
 class SnippetList extends React.Component<ThisPropsType, ThisStateType> {
   constructor(props: any) {
     super(props);
     this.state = {
-      SnippetLanguageArray: props.SnippetLanguageArray,
-      currentSnippetLanguage: props.currentSnippetLanguage,
+      SnippetGroupArray: props.SnippetGroupArray,
+      currentSnippetGroup: props.currentSnippetGroup,
       isLoading: false
     };
   }
@@ -31,7 +31,7 @@ class SnippetList extends React.Component<ThisPropsType, ThisStateType> {
 
   componentWillReceiveProps(nextProps: StateToPropsType) {
     // this.setState({ TableArray: nextProps.TableArray });
-    this.setState({ SnippetLanguageArray: nextProps.SnippetLanguageArray, currentSnippetLanguage: nextProps.currentSnippetLanguage });
+    this.setState({ SnippetGroupArray: nextProps.SnippetGroupArray, currentSnippetGroup: nextProps.currentSnippetGroup });
   }
 
   componentDidUpdate() {
@@ -39,14 +39,14 @@ class SnippetList extends React.Component<ThisPropsType, ThisStateType> {
   }
 
   onSnippetDelete = (Snippet: SnippetModel) => {
-    // remove snippet from current SnippetLanguage
-    var newSnippetLanguage = Object.assign({}, this.state.currentSnippetLanguage);
-    newSnippetLanguage.Snippets = newSnippetLanguage.Snippets.filter(s => s.id !== Snippet.id);
+    // remove snippet from current SnippetGroup
+    var newSnippetGroup = Object.assign({}, this.state.currentSnippetGroup);
+    newSnippetGroup.Snippets = newSnippetGroup.Snippets.filter(s => s.id !== Snippet.id);
 
-    // update current SnippetLanguage to store
-    this.props.actions.updateSnippetLanguage(newSnippetLanguage)
+    // update current SnippetGroup to store
+    this.props.actions.updateSnippetGroup(newSnippetGroup)
       .then(() => {
-        this.setState({ currentSnippetLanguage: newSnippetLanguage });
+        this.setState({ currentSnippetGroup: newSnippetGroup });
         toastr.success('Snippet deleted.');
       });
   }
@@ -67,7 +67,7 @@ class SnippetList extends React.Component<ThisPropsType, ThisStateType> {
         Header: '', // Custom header components!
         id: 'btn_details',
         Cell: (d: any) =>
-          <Link to={{ pathname: `/SnippetLanguage/${this.state.currentSnippetLanguage.id}/Snippet/${d.original.id}`, state: { currentSnippetLanguage: this.state.currentSnippetLanguage } }} className="btn btn-outline-success btn-sm mx-1" > Details</Link>,
+          <Link to={{ pathname: `/SnippetGroup/${this.state.currentSnippetGroup.id}/Snippet/${d.original.id}`, state: { currentSnippetGroup: this.state.currentSnippetGroup } }} className="btn btn-outline-success btn-sm mx-1" > Details</Link>,
         filterable: false,
         maxWidth: 75
       },
@@ -82,13 +82,13 @@ class SnippetList extends React.Component<ThisPropsType, ThisStateType> {
     return (
       < div >
         {
-          (this.state.currentSnippetLanguage !== undefined &&
-            this.state.currentSnippetLanguage.Snippets !== undefined &&
-            this.state.currentSnippetLanguage.Snippets.length > 0
+          (this.state.currentSnippetGroup !== undefined &&
+            this.state.currentSnippetGroup.Snippets !== undefined &&
+            this.state.currentSnippetGroup.Snippets.length > 0
           )
             ?
             <ReactTable
-              data={this.state.currentSnippetLanguage.Snippets}
+              data={this.state.currentSnippetGroup.Snippets}
               columns={columns}
               defaultPageSize={6}
               minRows={3}
@@ -102,34 +102,34 @@ class SnippetList extends React.Component<ThisPropsType, ThisStateType> {
 
 function mapStateToProps(storeState: StoreStateType, ownProps: OwnProps): StateToPropsType {
   return {
-    SnippetLanguageArray: storeState.SnippetLanguageArray,
-    currentSnippetLanguage: ownProps.currentSnippetLanguage,
+    SnippetGroupArray: storeState.SnippetGroupArray,
+    currentSnippetGroup: ownProps.currentSnippetGroup,
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<ISnippetLanguageAction>): DispatchToPropsType {
+function mapDispatchToProps(dispatch: Dispatch<ISnippetGroupAction>): DispatchToPropsType {
   return {
-    actions: bindActionCreators(SnippetLanguageActions, dispatch)
+    actions: bindActionCreators(SnippetGroupActions, dispatch)
   };
 }
 
 type OwnProps = {
-  currentSnippetLanguage: SnippetLanguageModel;
+  currentSnippetGroup: SnippetGroupModel;
 };
 
 type StateToPropsType = {
-  SnippetLanguageArray: SnippetLanguageModel[];
-  currentSnippetLanguage: SnippetLanguageModel;
+  SnippetGroupArray: SnippetGroupModel[];
+  currentSnippetGroup: SnippetGroupModel;
 };
 
 type ThisStateType = {
-  SnippetLanguageArray: SnippetLanguageModel[];
-  currentSnippetLanguage: SnippetLanguageModel;
+  SnippetGroupArray: SnippetGroupModel[];
+  currentSnippetGroup: SnippetGroupModel;
   isLoading: boolean;
 };
 
 type DispatchToPropsType = {
-  actions: typeof SnippetLanguageActions;
+  actions: typeof SnippetGroupActions;
 };
 
 type ThisPropsType = StateToPropsType & DispatchToPropsType & OwnProps;

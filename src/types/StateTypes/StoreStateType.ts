@@ -1,7 +1,7 @@
-import { SnippetLanguageModel } from 'types/modelTypes/SnippetLanguageModel';
+import { SnippetGroupModel } from 'types/modelTypes/SnippetGroupModel';
 
 export type StoreState = {
-  SnippetLanguageArray: SnippetLanguageModel[];
+  SnippetGroupArray: SnippetGroupModel[];
 };
 
 export default StoreState;
