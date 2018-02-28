@@ -16,6 +16,11 @@ const SnippetGroupList = (props: SnippetGroupListProps) => {
       Cell: (d: any) => <span className="SnippetGroupName">{d.value}</span>
     },
     {
+      Header: 'Language',
+      accessor: 'SnippetGroupLanguage',
+      Cell: (d: any) => <span className="SnippetGroupLanguage">{d.value}</span>
+    },
+    {
       Header: '',
       id: 'btn_details',
       Cell: (d: any) => <Link to={`/SnippetGroup/${d.original.id}`} className="btn btn-outline-success btn-sm mx-1" > Details</Link>,

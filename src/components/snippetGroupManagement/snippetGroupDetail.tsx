@@ -24,6 +24,7 @@ class SnippetGroupDetail extends React.Component<ThisPropsType, ThisStateType> {
       textFields: {
         id: (this.props.currentSnippetGroup.id !== undefined) ? this.props.currentSnippetGroup.id : '',
         SnippetGroupName: (this.props.currentSnippetGroup.SnippetGroupName !== undefined) ? this.props.currentSnippetGroup.SnippetGroupName : '',
+        SnippetGroupLanguage: (this.props.currentSnippetGroup.SnippetGroupLanguage !== undefined) ? this.props.currentSnippetGroup.SnippetGroupLanguage : '',
         SnippetGroupDescription: (this.props.currentSnippetGroup.SnippetGroupDescription !== undefined) ? this.props.currentSnippetGroup.SnippetGroupDescription : ''
       },
       textFieldsErrors: {}
@@ -62,6 +63,17 @@ class SnippetGroupDetail extends React.Component<ThisPropsType, ThisStateType> {
                   isRequiredErrorMessage="SnippetGroup Name is required...."
                   onChange={this.onTextFieldChange}
                   validate={(value) => value.length > 1 ? false : 'SnippetGroup name cannot less than 2 letters.'}
+                />
+              </div>
+              <div className="col">
+                <CCTextField
+                  fieldName="SnippetGroupLanguage"
+                  label="Language"
+                  value={this.state.textFields.SnippetGroupLanguage}
+                  isRequired={true}
+                  isRequiredErrorMessage="SnippetGroup Language is required...."
+                  onChange={this.onTextFieldChange}
+                  validate={(value) => value.length > 1 ? false : 'SnippetGroup language cannot less than 2 letters.'}
                 />
               </div>
               <div className="col">
@@ -106,6 +118,7 @@ class SnippetGroupDetail extends React.Component<ThisPropsType, ThisStateType> {
         textFields: {
           id: nextProps.currentSnippetGroup.id ? nextProps.currentSnippetGroup.id : '',
           SnippetGroupName: nextProps.currentSnippetGroup.SnippetGroupName ? nextProps.currentSnippetGroup.SnippetGroupName : '',
+          SnippetGroupLanguage: nextProps.currentSnippetGroup.SnippetGroupLanguage ? nextProps.currentSnippetGroup.SnippetGroupLanguage : '',
           SnippetGroupDescription: nextProps.currentSnippetGroup.SnippetGroupDescription ? nextProps.currentSnippetGroup.SnippetGroupDescription : ''
         }
       });
@@ -133,6 +146,7 @@ class SnippetGroupDetail extends React.Component<ThisPropsType, ThisStateType> {
     const SnippetGroup: SnippetGroupModel = new SnippetGroupModel();
     SnippetGroup.id = this.state.textFields.id ? this.state.textFields.id : UUID();
     SnippetGroup.SnippetGroupName = this.state.textFields.SnippetGroupName;
+    SnippetGroup.SnippetGroupLanguage = this.state.textFields.SnippetGroupLanguage;
     SnippetGroup.SnippetGroupDescription = this.state.textFields.SnippetGroupDescription;
 
     if (!this.isFormValid()) {
@@ -226,6 +240,7 @@ type ThisStateType = {
   textFields: {
     id: string;
     SnippetGroupName: string;
+    SnippetGroupLanguage: string;
     SnippetGroupDescription: string;
   },
   textFieldsErrors: {}

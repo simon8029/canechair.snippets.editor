@@ -7,8 +7,8 @@ import Store, { history } from 'store/store';
 import App from 'components/App';
 // import SnippetMain from 'components/snippetManagement/snippetMain';
 import SnippetDetail from 'components/snippetManagement/snippetDetail';
-import SnippetLanguageMain from 'components/snippetLanguageManagement/snippetLanguageMain';
-import SnippetLanguageDetail from 'components/snippetLanguageManagement/snippetLanguageDetail';
+import SnippetGroupMain from 'components/snippetGroupManagement/snippetGroupMain';
+import SnippetGroupDetail from 'components/snippetGroupManagement/snippetGroupDetail';
 import '../node_modules/toastr/build/toastr.min.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
@@ -20,11 +20,11 @@ ReactDOM.render(
         {/* <Route exact path="/snippets" component={SnippetMain} />
         <Route exact path="/snippet" component={SnippetDetail} />
         <Route exact path="/snippet/:SnippetId" component={SnippetDetail} /> */}
-        <Route exact path="/snippetLanguages" component={SnippetLanguageMain} />
-        <Route exact path="/snippetLanguage" component={SnippetLanguageDetail} />
-        <Route exact path="/snippetLanguage/:SnippetLanguageId" component={SnippetLanguageDetail} />
-        <Route exact path="/snippetLanguage/:SnippetLanguageId/snippet" component={SnippetDetail} />
-        <Route exact path="/snippetLanguage/:SnippetLanguageId/snippet/:SnippetId" component={SnippetDetail} />
+        <Route exact path="/snippetGroups" component={SnippetGroupMain} />
+        <Route exact path="/snippetGroup" component={SnippetGroupDetail} />
+        <Route exact path="/snippetGroup/:SnippetGroupId" component={SnippetGroupDetail} />
+        <Route exact path="/snippetGroup/:SnippetGroupId/snippet" component={SnippetDetail} />
+        <Route exact path="/snippetGroup/:SnippetGroupId/snippet/:SnippetId" component={SnippetDetail} />
       </Switch>
     </ConnectedRouter >
   </Provider>,

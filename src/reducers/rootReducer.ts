@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import { SnippetLanguageReducer } from './SnippetLanguageReducer';
+import { SnippetGroupReducer } from './SnippetGroupReducer';
 
 const rootReducer = combineReducers({
   routerReducer,
-  SnippetLanguageArray: SnippetLanguageReducer
+  SnippetGroupArray: SnippetGroupReducer
 });
 
 export default rootReducer;

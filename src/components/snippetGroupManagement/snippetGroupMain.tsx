@@ -10,6 +10,7 @@ import * as toastr from 'toastr';
 import * as FileSaver from 'file-saver';
 import * as JSZip from 'jszip';
 import { SnippetJsonTemplate } from 'templates/snippetJsonTemplate';
+import { PackageJsonTemplate } from 'templates/packageJsonTemplate';
 import SnippetGroupList from './snippetGroupList';
 
 class SnippetGroupMain extends React.Component<ThisPropsType, ThisStateType> {
@@ -59,9 +60,10 @@ class SnippetGroupMain extends React.Component<ThisPropsType, ThisStateType> {
   }
 
   generateSnippetFiles = () => {
-    let zip = new JSZip().folder('snippets');
+    let zip = new JSZip();
+    let snippetPackageJsonFileBlock = ''; // string of package.json file's contributes block
     this.state.SnippetGroupArray.map(sl => {
-      let snippetBlocks = '';
+      let snippetBlocks = ''; // string of all snippets in current snippet group
       sl.Snippets.map(s => {
         snippetBlocks += SnippetJsonTemplate
           .replace('__SnippetName__', s.SnippetName)
@@ -70,17 +72,25 @@ class SnippetGroupMain extends React.Component<ThisPropsType, ThisStateType> {
           .replace('__SnippetDescription__', s.SnippetDescription);
       });
 
+      snippetPackageJsonFileBlock += PackageJsonTemplate
+        .replace('__SnippetGroupLanguage__', sl.SnippetGroupLanguage)
+        .replace('__SnippetGroupName__', sl.SnippetGroupName);
+
       // Add curve bracket and remove the last comma from snippetBlocks string.
       snippetBlocks = `{${snippetBlocks.slice(0, -1)}}`;
 
       let snippetGroup = new Blob([snippetBlocks], { type: 'text/json;charset=utf-8' });
-      zip.file(`CaneChairSnippets_${sl.SnippetGroupName}_.json`, snippetGroup);
+      zip.folder('snippets').file(`CaneChairSnippets_${sl.SnippetGroupName}_.json`, snippetGroup);
     });
+
+    snippetPackageJsonFileBlock = `{${snippetPackageJsonFileBlock.slice(0, -1)}}`; // Remove last comma
+    let snippetPackageJsonFile = new Blob([snippetPackageJsonFileBlock], { type: 'text/json;charset=utf-8' });
+    zip.file(`packageJsonContributes.json`, snippetPackageJsonFile);
+
     zip.generateAsync({ type: 'blob' })
       .then((b) => {
         FileSaver.saveAs(b, 'snippets.zip');
       });
-    // FileSaver.saveAs(blob, 'hello world.zip');
   }
 }
 
