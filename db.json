@@ -1,46 +1,34 @@
 {
   "snippetLanguage": [
     {
-      "id": "cbe5f81e-f56d-4214-add3-c9ef3c09c5f2",
-      "SnippetLanguageName": "sdf",
+      "id": "95522a91-5c0a-4a25-8c97-aed7db50a207",
+      "SnippetLanguageName": "TSX",
       "SnippetLanguageDescription": "",
       "Snippets": [
         {
-          "id": "89feb4e1-5982-4127-bf9e-b091f317dc93",
-          "SnippetName": "sdf",
-          "SnippetDescription": "sdf",
-          "SnippetBody": ""
+          "id": "be40305e-8755-4f6f-bdf4-1c67e067795d",
+          "SnippetName": "ReactJS : TSX : Component : Container",
+          "SnippetDescription": "Create a container component. (TSX)",
+          "SnippetBody": "\"import * as ${1:__ComponentName__}ActionTypes from 'types/actionTypes/${1:__ComponentName__}ActionTypes';\",\n\"import { I${1:__ComponentName__}Action } from 'actions/interfaces/I${1:__ComponentName__}Action';\",\n\"import { ${1:__ComponentName__}Model } from 'types/modelTypes/${1:__ComponentName__}Model';\",\n\"\",\n\"export function ${1:__ComponentName__}Reducer(state: ${1:__ComponentName__}Model[] = [], ${1:__ComponentName__}Action: I${1:__ComponentName__}Action): ${1:__ComponentName__}Model[] | ${1:__ComponentName__}Model {\",\n\"  switch (${1:__ComponentName__}Action.type) {\",\n\"    case ${1:__ComponentName__}ActionTypes.${1:__ComponentName__}GetAllSuccess:\",\n\"      return ${1:__ComponentName__}Action.${1:__ComponentName__}Array;\",\n\"    case ${1:__ComponentName__}ActionTypes.${1:__ComponentName__}AddSuccess:\",\n\"      return [...state, ${1:__ComponentName__}Action.${1:__ComponentName__}];\",\n\"    case ${1:__ComponentName__}ActionTypes.${1:__ComponentName__}DeleteSuccess:\",\n\"      return state.filter(s => s.id !== ${1:__ComponentName__}Action.${1:__ComponentName__}.id);\",\n\"    case ${1:__ComponentName__}ActionTypes.${1:__ComponentName__}UpdateSuccess:\",\n\"      return [...state.filter(s => s.id !== ${1:__ComponentName__}Action.${1:__ComponentName__}.id), Object.assign({}, ${1:__ComponentName__}Action.${1:__ComponentName__})];\",\n\"    default:\",\n\"      return state;\",\n\"  }\",\n\"}\""
         },
         {
-          "id": "ec9cfe31-f6bf-4989-a06f-c08ba1c31343",
-          "SnippetName": "sdf",
-          "SnippetDescription": "sdg",
-          "SnippetBody": ""
-        },
-        {
-          "id": "f8c37a28-deae-4266-9824-348e8570dcfd",
-          "SnippetName": "gsdf",
-          "SnippetDescription": "sdf",
-          "SnippetBody": ""
+          "id": "81f37c75-b056-4cef-9cd8-bff21357f4d1",
+          "SnippetName": "ReactJS : TSX : Component : Presentational",
+          "SnippetDescription": "Create a presentational component. (TSX)",
+          "SnippetBody": "\"import * as ActionTypes from 'types/actionTypes';\\r\",\n\"import { ${1:__ComponentName__}Model } from 'types/modelTypes/${1:__ComponentName__}Model';\\r\",\n\"\\r\",\n\"export interface IGetAll${1:__ComponentName__}Success {\\r\",\n\"  type: ActionTypes.${1:__ComponentName__}GetAllSuccess;\\r\",\n\"  ${1:__ComponentName__}Array: ${1:__ComponentName__}Model[];\\r\",\n\"}\\r\",\n\"\\r\",\n\"export interface IGet${1:__ComponentName__}ByIdSuccess {\\r\",\n\"  type: ActionTypes.${1:__ComponentName__}GetByIdSuccess;\\r\",\n\"  ${1:__ComponentName__}: ${1:__ComponentName__}Model;\\r\",\n\"}\\r\",\n\"\\r\",\n\"export interface IAddNew${1:__ComponentName__}Success {\\r\",\n\"  type: ActionTypes.${1:__ComponentName__}AddSuccess;\\r\",\n\"  ${1:__ComponentName__}: ${1:__ComponentName__}Model;\\r\",\n\"}\\r\",\n\"\\r\",\n\"export interface IUpdate${1:__ComponentName__}Success {\\r\",\n\"  type: ActionTypes.${1:__ComponentName__}UpdateSuccess;\\r\",\n\"  ${1:__ComponentName__}: ${1:__ComponentName__}Model;\\r\",\n\"}\\r\",\n\"\\r\",\n\"export interface IDelete${1:__ComponentName__}Success {\\r\",\n\"  type: ActionTypes.${1:__ComponentName__}DeleteSuccess;\\r\",\n\"  ${1:__ComponentName__}: ${1:__ComponentName__}Model;\\r\",\n\"}\\r\",\n\"\\r\",\n\"export type I${1:__ComponentName__}Action =\\r\",\n\"  IGetAll${1:__ComponentName__}Success |\\r\",\n\"  IGet${1:__ComponentName__}ByIdSuccess |\\r\",\n\"  IAddNew${1:__ComponentName__}Success |\\r\",\n\"  IUpdate${1:__ComponentName__}Success |\\r\",\n\"  IDelete${1:__ComponentName__}Success;\\r\",\n\"\\r\",\n\"export default I${1:__ComponentName__}Action;\\r\",\n\"\""
         }
       ]
     },
     {
-      "id": "0686d3aa-3744-4ab6-ae42-5a6b16260a5c",
-      "SnippetLanguageName": "123",
+      "id": "7724d83d-149a-4039-95bf-3afbf5208ae1",
+      "SnippetLanguageName": "TS",
       "SnippetLanguageDescription": "",
       "Snippets": [
         {
-          "id": "4bcb1c16-e416-4290-b019-acdb6dd83760",
-          "SnippetName": "123",
-          "SnippetDescription": "s23",
-          "SnippetBody": "fggasdfsdfasdf"
-        },
-        {
-          "id": "caa647f8-d3f3-4c62-b5d7-d3683c47b8f0",
-          "SnippetName": "fsdfsdf",
-          "SnippetDescription": "41234",
-          "SnippetBody": "sdgasdf"
+          "id": "9ce1d241-dfe2-4113-a2b5-855f92eac1fd",
+          "SnippetName": "ReactJS : TS : Route : NewRoute",
+          "SnippetDescription": "Create a Route (TypeScript)",
+          "SnippetBody": "\"<Route path=\\\"${1:__path__}\\\" component={${2:__componentName__} />\""
         }
       ]
     }

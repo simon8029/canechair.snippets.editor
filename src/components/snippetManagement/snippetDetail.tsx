@@ -170,8 +170,6 @@ class SnippetDetail extends React.Component<ThisPropsType, ThisStateType> {
 
     this.setState({ isFormSaving: true });
 
-    console.log(`this.state.CurrentSnippetLanguage:`);
-    console.log(this.state.CurrentSnippetLanguage);
     let newSnippetLanguage = Object.assign({}, this.state.CurrentSnippetLanguage);
 
     if (this.state.isNewSnippet) {
